@@ -1,0 +1,3 @@
+Write as little and as simple code as reasonably possible.
+
+I've also been putting spaces around function arguments, e.g. kickWithFoot( ball ), for no reason.

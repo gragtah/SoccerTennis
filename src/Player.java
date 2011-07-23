@@ -5,9 +5,7 @@ import org.newdawn.slick.Renderable;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 
-public class Player {
-	private int x;
-	private int y;
+public class Player extends PhysicalEntity {
 	private int width;
 	private int height;
 	private int speed;
@@ -16,8 +14,8 @@ public class Player {
 	private Animation p1RunRight;
 	private Renderable p1;
 	private boolean jumping;
-	private int jumpSpeed;
-	private int startingJumpSpeed;
+	private float jumpSpeed;
+	private float startingJumpSpeed;
 
 	private boolean jumpingLeft = false;
 	private boolean jumpingRight = false;
@@ -26,47 +24,45 @@ public class Player {
 
 	private int recentlyPressedDirection = 0; // 0 left, 1 right
 
+	// todo: player should jump with it's chest out and legs back to control the ball, rather than the sort of leaping thing it does now.
+
 	public Player() throws SlickException {
-		x = 100;
-		y = 370;
-		speed = 8; //todo acceleration. or don't bother?
+		super( 100, 370 );
+
+		speed = 8; 
 		jumping = false;
-		startingJumpSpeed = 15;
+		startingJumpSpeed = 0.65f;
 		jumpSpeed = startingJumpSpeed;
 
 		Image[] p1frames = {
-			new Image("run0.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image("run1.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image("run2.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image("run3.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image("run4.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image("run5.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image("run6.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image("run7.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run0.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run1.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run2.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run3.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run4.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run5.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run6.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run7.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
 		};
 		p1RunRight = new Animation( p1frames, 200 );
-		p1Still = new Image("still.gif").getScaledCopy( 0.5f ); //.getScaledCopy( width, height );
+		p1Still = new Image(SoccerTennis.RESOURCE_DIR + "still.gif").getScaledCopy( 0.5f ); //.getScaledCopy( width, height );
 		p1 = p1Still;
 
 		width = p1RunRight.getWidth();//52;
 		height = p1RunRight.getHeight();//87;
 	}
 
-	// not used yet iirc
-	public Renderable getRenderable() {
-		return p1;
-	}
-
 	public void draw() {
 		p1.draw( x, y );
 	}
 
-	private void updateP1Jump() {
+	private void updateJump( int delta ) {
 		if ( jumping ) {
-			y -= jumpSpeed;
-			jumpSpeed -= SoccerTennis.gravity;// uppercase globals.  (actually get rid of globals)
+			jumpSpeed -= SoccerTennis.GRAVITY * delta;
+			y -= jumpSpeed * delta;
 		}
 
+		// land
 		if ( y > 370 ) {
 			y = 370;
 			jumping = false;
@@ -76,8 +72,10 @@ public class Player {
 		}
 	}	
 
-	public void update(int delta) {
-		updateP1Jump();
+	public void update( GameContainer gc, int delta ) {
+		pollInput( gc.getInput(), gc.getWidth(), gc.getHeight() );
+
+		updateJump( delta );
 		p1RunRight.update( delta );
 
 		if ( movingRight ) {
@@ -87,8 +85,9 @@ public class Player {
 		}
 	}
 
-	public void pollInput(GameContainer gc) {
-		Input input = gc.getInput();
+	private void pollInput( Input input, int screenWidth, int screenHeight ) {
+		// todo: can't jump if you're holding left and right down at the same time
+		// todo: move "physics" code out. (would be nice not to have to pass screenwidth/height in here)
 
 		// If left and right are both down, go with the most recently pressed
 		if ( input.isKeyDown(Input.KEY_LEFT) && input.isKeyDown(Input.KEY_RIGHT) ) {
@@ -124,10 +123,10 @@ public class Player {
 		} 
 		
 		if ( movingRight ) {
-			if ( x + speed < (gc.getWidth() / 2) - width ) {
+			if ( x + speed < (screenWidth / 2) - width ) {
 				x = x + speed;
 			} else {
-				x = (gc.getWidth() / 2) - width;
+				x = (screenWidth / 2) - width;
 			}
 		}
 

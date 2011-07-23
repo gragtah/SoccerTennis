@@ -1,0 +1,1 @@
+etc is a directory for things that aren't directly part of the codebase.  Stuff like Photoshop files, design documents, etc.

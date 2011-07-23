@@ -1,0 +1,27 @@
+<project name="SoccerTennis" basedir="." default="main">
+    <property name="main-class"  value="SoccerTennis"/>
+    <property name="classdir"  value="classes"/>
+    <property name="slicklibdir"  value="lib/slick/lib"/>
+
+	<path id="classpath">
+        <pathelement path="${classdir}:${slicklibdir}/slick.jar:${slicklibdir}/lwjgl.jar"/>
+    </path>
+
+    <target name="main" depends="clean,run"/>
+
+    <target name="clean">
+        <delete dir="${classdir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classdir}"/>
+        <javac srcdir="src" destdir="${classdir}" classpathref="classpath"/>
+    </target>
+
+    <target name="run" depends="compile">
+        <java classname="SoccerTennis" classpathref="classpath" fork="true">
+			<sysproperty key="java.library.path" path="${slicklibdir}"/>
+		</java>
+    </target>
+</project>
+
