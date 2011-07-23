@@ -4,19 +4,20 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Renderable;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 
 public class Player extends PhysicalEntity {
 	private int width;
 	private int height;
-	private int speed;
 
 	private Image p1Still;
 	private Animation p1RunRight;
 	private Renderable p1;
-	private boolean jumping;
+	private float runSpeed;
 	private float jumpSpeed;
 	private float startingJumpSpeed;
 
+	private boolean jumping = false;
 	private boolean jumpingLeft = false;
 	private boolean jumpingRight = false;
 	private boolean movingLeft = false;
@@ -29,9 +30,8 @@ public class Player extends PhysicalEntity {
 	public Player() throws SlickException {
 		super( 100, 370 );
 
-		speed = 8; 
-		jumping = false;
-		startingJumpSpeed = 0.65f;
+		runSpeed = 0.6f; 
+		startingJumpSpeed = 0.75f;
 		jumpSpeed = startingJumpSpeed;
 
 		Image[] p1frames = {
@@ -50,10 +50,26 @@ public class Player extends PhysicalEntity {
 
 		width = p1RunRight.getWidth();//52;
 		height = p1RunRight.getHeight();//87;
+
+		this.collisionShape = new Rectangle( x, y, width, height );
 	}
 
 	public void draw() {
 		p1.draw( x, y );
+	}
+
+	public void update( GameContainer gc, int delta ) {
+		pollInput( gc.getInput() );
+
+		updateMoving( delta, gc.getWidth(), gc.getHeight() );
+		updateJump( delta );
+		p1RunRight.update( delta );
+
+		if ( movingRight ) {
+			p1 = p1RunRight;
+		} else {
+			p1 = p1Still;
+		}
 	}
 
 	private void updateJump( int delta ) {
@@ -72,22 +88,27 @@ public class Player extends PhysicalEntity {
 		}
 	}	
 
-	public void update( GameContainer gc, int delta ) {
-		pollInput( gc.getInput(), gc.getWidth(), gc.getHeight() );
-
-		updateJump( delta );
-		p1RunRight.update( delta );
-
+	private void updateMoving( int delta, int screenWidth, int screenHeight ) {
+		if ( movingLeft ) {
+			if ( x - runSpeed > -50 ) { // hack (-50 should be 0)
+				x -= runSpeed * delta;
+			} else {
+				x = -50;
+			}
+		} 
+		
 		if ( movingRight ) {
-			p1 = p1RunRight;
-		} else {
-			p1 = p1Still;
+			if ( x + runSpeed < (screenWidth / 2) - width ) {
+				x += runSpeed * delta;
+			} else {
+				x = (screenWidth / 2) - width;
+			}
 		}
 	}
 
-	private void pollInput( Input input, int screenWidth, int screenHeight ) {
+	private void pollInput( Input input ) {
+		// todo: turn this into a keyboard listener
 		// todo: can't jump if you're holding left and right down at the same time
-		// todo: move "physics" code out. (would be nice not to have to pass screenwidth/height in here)
 
 		// If left and right are both down, go with the most recently pressed
 		if ( input.isKeyDown(Input.KEY_LEFT) && input.isKeyDown(Input.KEY_RIGHT) ) {
@@ -111,22 +132,6 @@ public class Player extends PhysicalEntity {
 				recentlyPressedDirection = 1;
 			} else {
 				movingRight = false;
-			}
-		}
-
-		if ( movingLeft ) {
-			if ( x - speed > -50 ) { // hack (-50 should be 0)
-				x = x - speed;
-			} else {
-				x = -50;
-			}
-		} 
-		
-		if ( movingRight ) {
-			if ( x + speed < (screenWidth / 2) - width ) {
-				x = x + speed;
-			} else {
-				x = (screenWidth / 2) - width;
 			}
 		}
 

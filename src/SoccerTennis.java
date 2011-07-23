@@ -35,7 +35,7 @@ public class SoccerTennis extends BasicGame {
 	public void init(GameContainer gc) throws SlickException {
 		stage = new Image(SoccerTennis.RESOURCE_DIR + "stage0.png").getScaledCopy( WIN_WIDTH, WIN_HEIGHT );
 		p1 = new Player();
-		ball = new Ball( 0, 300 );
+		ball = new Ball( 0, 330 );
 
 		gc.setVSync( true ); //setTargetFrameRate( 60 );
 	}
@@ -57,7 +57,7 @@ public class SoccerTennis extends BasicGame {
 	public void render(GameContainer gc, Graphics g) throws SlickException {
 		stage.draw( 0, 0 );
 		p1.draw();
-		ball.draw();
+		ball.draw(g);
 	}
 
 	public static void main (String[] argv) throws SlickException {
