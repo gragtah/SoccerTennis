@@ -35,14 +35,14 @@ public class Player extends PhysicalEntity {
 		jumpSpeed = startingJumpSpeed;
 
 		Image[] p1frames = {
-			new Image(SoccerTennis.RESOURCE_DIR + "run0.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image(SoccerTennis.RESOURCE_DIR + "run1.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image(SoccerTennis.RESOURCE_DIR + "run2.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image(SoccerTennis.RESOURCE_DIR + "run3.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image(SoccerTennis.RESOURCE_DIR + "run4.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image(SoccerTennis.RESOURCE_DIR + "run5.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image(SoccerTennis.RESOURCE_DIR + "run6.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
-			new Image(SoccerTennis.RESOURCE_DIR + "run7.gif").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run0.png").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run1.png").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run3.png").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run6.png").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run7.png").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run8.png").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run9.png").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
+			new Image(SoccerTennis.RESOURCE_DIR + "run10.png").getScaledCopy( 0.5f ), //.getScaledCopy( width, height );
 		};
 		p1RunRight = new Animation( p1frames, 200 );
 		p1Still = new Image(SoccerTennis.RESOURCE_DIR + "still.gif").getScaledCopy( 0.5f ); //.getScaledCopy( width, height );
