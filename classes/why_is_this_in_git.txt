@@ -1,0 +1,1 @@
+This directory is here so people can run the game without needing a Java compiler installed.  Maybe there's a better way but I can't think of one off the top of my head.  I'll delete this dir soon enough, anyway.
