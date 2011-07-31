@@ -16,6 +16,9 @@ public class SoccerTennis extends BasicGame {
 	private Player p1;
 	private Ball ball;
 
+	public static final boolean DEBUG_BOUNCE_OFF_WALLS = true;
+	public static final boolean DEBUG_DRAW_COLLISION_BOUNDARIES	 = true;
+
 	// Acceleration in some distance unit per millisecond, I guess.
 	public static final float GRAVITY = 0.0027f; 
 	public static final String RESOURCE_DIR = "res/";
@@ -35,7 +38,7 @@ public class SoccerTennis extends BasicGame {
 	public void init(GameContainer gc) throws SlickException {
 		stage = new Image(SoccerTennis.RESOURCE_DIR + "stage0.png").getScaledCopy( WIN_WIDTH, WIN_HEIGHT );
 		p1 = new Player();
-		ball = new Ball( 0, 330 );
+		ball = new Ball( 0, 400 );
 
 		gc.setVSync( true ); //setTargetFrameRate( 60 );
 	}
@@ -58,6 +61,11 @@ public class SoccerTennis extends BasicGame {
 		stage.draw( 0, 0 );
 		p1.draw();
 		ball.draw(g);
+
+		if ( DEBUG_DRAW_COLLISION_BOUNDARIES ) {
+			g.draw(p1.getCollisionShape());
+			g.draw(ball.getCollisionShape());
+		}
 	}
 
 	public static void main (String[] argv) throws SlickException {

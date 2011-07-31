@@ -31,7 +31,7 @@ public class Player extends PhysicalEntity {
 		super( 100, 370 );
 
 		runSpeed = 0.6f; 
-		startingJumpSpeed = 0.75f;
+		startingJumpSpeed = 0.85f;
 		jumpSpeed = startingJumpSpeed;
 
 		Image[] p1frames = {
@@ -51,7 +51,7 @@ public class Player extends PhysicalEntity {
 		width = p1RunRight.getWidth();//52;
 		height = p1RunRight.getHeight();//87;
 
-		this.collisionShape = new Rectangle( x, y, width, height );
+		this.setCollisionShape(new Rectangle( 0, 0, width, height ));
 	}
 
 	public void draw() {
@@ -89,6 +89,8 @@ public class Player extends PhysicalEntity {
 	}	
 
 	private void updateMoving( int delta, int screenWidth, int screenHeight ) {
+		// todo: running acceleration
+
 		if ( movingLeft ) {
 			if ( x - runSpeed > -50 ) { // hack (-50 should be 0)
 				x -= runSpeed * delta;
